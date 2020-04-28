@@ -12,6 +12,9 @@ from matplotlib import rcParams
 from matplotlib import ticker
 
 from potentials import *
+from phycon import *
+from grid import *
 
-rotationCurve(addbulge, "black", "Rotation Curve", '+')
-
+#rotationCurve(addbulge, "black", "Rotation Curve", '+')
+os.chdir('/Users/veronicaplanck/Desktop/appendixA')
+getDenFileOf("blank80.txt")
