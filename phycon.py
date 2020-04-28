@@ -1,5 +1,15 @@
 #-----------------PHYSICAL CONSTANTS-----------------#
+import numpy as np
 import math as m
+
+#------To grid the disc
+Rm = 18                                                  # Radius of the disc 
+
+reso_R = 80      
+dis_R = np.linspace(0, Rm, reso_R + 1)                       # Divide R into pieces
+
+reso_theta = 60                                          # Divide θ into pieces        
+dis_theta = np.linspace(0, m.pi/2, reso_theta + 1)
 
 #------Units Conversion
 kpcTom = 3.086*10**19           #distance 
