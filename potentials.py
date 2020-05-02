@@ -7,6 +7,8 @@ import matplotlib.font_manager
 from IPython.core.display import HTML
 from matplotlib import rcParams
 from matplotlib import ticker
+from mpl_toolkits.axes_grid1 import ImageGrid
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from phycon import *
 from roCurve import *
@@ -44,7 +46,6 @@ def haloPot(xi, yi, zi, ti, q, span):
 	return pot, fxi, fyi
 
 
-
 #----cgArm
 def cgpot(xi, yi, zi, ti):
 	xi = xi * kpcTom
@@ -71,8 +72,7 @@ def cgpot(xi, yi, zi, ti):
 		Bn = Kn * H * (1 + 0.4 * Kn * H)
 		# no sechTerm here sat simplify the problem
 		Dn = (1 + Kn * H + 0.3 * (Kn * H)**2) / (1 + 0.3 * Kn * H)
-		gamma = Nm * (np.arctan2( ypi, xpi)
-						 - np.log(np.sqrt( xpi**2 + ypi**2) / r0) / np.tan(pA))
+		gamma = Nm * (np.arctan2( ypi, xpi) - np.log(np.sqrt( xpi**2 + ypi**2) / r0) / np.tan(pA))
 
 		sumPart = sumPart + Cn[i] / ( Kn * Dn) * np.cos(( i + 1) * gamma)
 
@@ -80,11 +80,14 @@ def cgpot(xi, yi, zi, ti):
 
 	return pot
 
+
+
 #----bar
 def testbar(xi, yi, zi, ti):
 	xi = xi * kpcTom
 	yi = yi * kpcTom
 	zi = zi * kpcTom
+	ti = ti * gyrTos
 
 
 	xpi = xi * np.cos( ti * phibar) - yi * np.sin( ti * phibar)
@@ -112,52 +115,62 @@ def testbar(xi, yi, zi, ti):
 
 
 #-----------------PLOT FUNCTION-----------------#
-#x, y = np.linspace(-10, 10, 100), np.linspace(-10, 10, 100)
-#X, Y = np.meshgrid(x, y)
-#Z = np.zeros((100,100))
 
 
-def plotPot(func, porf, title):
-
-	x, y = np.linspace(-10, 10, 100), np.linspace(-10, 10, 100)
+def subPlotStat(func, porf, time):
+	x, y = np.linspace(-15, 15, 600), np.linspace(-15, 15, 600)
 	X, Y = np.meshgrid(x, y)
-	Z = np.zeros((100,100))
-	
-	if porf == "contour":
-		T = func(X, Y, Z, 2.35, 0.5, 3)[0]
-	else:
-		T = func(X, Y, Z, 2.35, 0.5, 3)[1]
+	Z = np.zeros((600, 600))
 
-	figure(num=None, figsize=(2, 1.8), dpi=300, facecolor='w', edgecolor='k')
-	font = {'family' : 'DejaVu Sans', 'size': 8}
-	mpl.rc('font', **font)              # pass in the font dict as kwargs
-	rcParams['axes.titlepad'] = 12
+	if porf == "potential":
+		if func == haloPot:
+			T = func(X, Y, Z, time, 0.4, 1)[0]
+		elif func == cgpot:
+			T = func(X, Y, Z, time)
+		else:
+			T = func(X, Y, Z, time)[0]
+	elif port == "force":
+		if func == haloPot:
+			T = func(X, Y, Z, time, 0.5, 3)[1]
+		else:
+			T = func(X, Y, Z, time)[1]
 
-	ax = plt.axes()
-	ax.tick_params( direction="in")
-
-	plt.contourf(X, Y, T, 20, cmap='RdGy')
-
-	#plt.clim(-2*10**8,2*10**8)
-	plt.title(title + " Contour Plot")
-
-	plt.xlabel("x / kpc")
-	plt.xticks(np.arange(-10, 15, step = 5),fontsize = 5,fontweight = 'normal')
-
-	plt.ylabel("y / kpc")
-	plt.yticks(np.arange(-10, 15, step = 5),fontsize = 5, fontweight='normal')
+	return X, Y, T
 
 
-	tick_locator = ticker.MaxNLocator(nbins = 5)
-	cbar = plt.colorbar( extend = 'neither', spacing = 'proportional',
-				orientation = 'vertical', shrink = 1)
-	cbar.locator = tick_locator
-	cbar.update_ticks()
-	cbar.ax.tick_params(labelsize = 5, grid_alpha = 0.5, direction = 'in')
-	cbar.set_label(label = r'$cm^{2}/s^{2}$', size = 'small')
 
-	return cbar
 
-# #plotPot(haloPot, "force","halo")
-# #plt.show()  
+def comparePot(sub_plot_stat_1, sub_plot_stat_2, TITLE = "title", LABEL1="time1", LABEL2="time2", VMIN=-8 * 10 ** 8,
+			   VMAX=8 * 10 ** 8):
+	fig = plt.figure(figsize=(8, 4.5))
+
+	grid = ImageGrid(fig, 111,  # as in plt.subplot(111)
+					 nrows_ncols=(1, 2),
+					 axes_pad=0.052,  # gap between subplots
+					 share_all=True)
+
+	fig.suptitle(TITLE, fontsize=12.5, x=0.5, y=0.92)
+
+	ax1, ax2 = grid[0], grid[1]
+
+	im1 = ax1.imshow(sub_plot_stat_1[2], extent=[-15, 15, -15, 15], cmap='RdGy', vmin=VMIN, vmax=VMAX)
+	im2 = ax2.imshow(sub_plot_stat_2[2], extent=[-15, 15, -15, 15], cmap='RdGy', vmin=VMIN, vmax=VMAX)
+
+	for ax in grid:
+		ax.set_xticks([-10, -5, 0, 5, 10])
+		ax.set_yticks([-10, -5, 0, 5, 10])
+		ax.set_xlabel('X [kpc]')
+		ax.set_ylabel('Y [kpc]')
+		ax.tick_params(direction="in")
+
+	ax1.text(-14.5, 13.64, LABEL1, bbox={'facecolor': 'white', 'pad': 2.7})
+	ax2.text(-14.5, 13.64, LABEL2, bbox={'facecolor': 'white', 'pad': 2.7})
+
+	cax = plt.axes([0.908, 0.154, 0.03, 0.682])  # adjust the axes positon (left, bottom, width, height)
+	cbar = fig.colorbar(im2, cax=cax)  #
+	cbar.ax.tick_params(labelsize=8, grid_alpha=0.5, direction='in')
+	cbar.set_label(label=r'$cm^{2}/s^{2}$', size='medium')
+
+	return plt.savefig('images/'+ TITLE + '.png', dpi=300)
+
 
