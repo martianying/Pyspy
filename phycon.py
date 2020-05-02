@@ -52,3 +52,14 @@ Mbar = 3. * 10**8 * solarM       #(*in kg*)
 #------Tidal Constants
 phibar_t = 11 * kmTom / kpcTom
 Mbar_t = 3.30 * 10**9 * solarM 
+
+#------Arm Constants
+r0 = 8 * kpcTom
+Rs = 7 * kpcTom
+rho = 2.1289 * 10**(-24) / (gTokg * cmTom**3)
+tpeak = 3 * gyrTos
+Nm = 2
+pA = m.pi / 180 * 15
+H = 0.8 * kpcTom
+Cn = [8/(3 * m.pi), 1/2, 8/(15 * m.pi)]
+constCG = -4 * m.pi * Gcode * H * rho
