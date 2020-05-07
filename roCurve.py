@@ -13,8 +13,8 @@ def disc(r_kpc):
     '''
     
     r_m = r_kpc * kpcTom 
-    Up = Gcode * Md * r_m**2
-    Down = (ad + bd)**2 + r_m**2
+    Up = Gcode * MDISC * r_m**2
+    Down = (ADISC + BDISC)**2 + r_m**2
     vel2_in_m = Up / Down**(3/2)
     vel2_in_km = vel2_in_m / kmTom**2
     
@@ -24,8 +24,8 @@ def disc(r_kpc):
 def bulge(r_kpc):
     
     r_m = r_kpc * kpcTom 
-    Up = Gcode * Mb * r_m**2
-    Down = r_m**2 + bb**2
+    Up = Gcode * MBULGE * r_m**2
+    Down = r_m**2 + BBULGE**2
     vel2_in_m = Up / Down**(3 / 2)
     vel2_in_km = vel2_in_m / kmTom**2
     
@@ -36,8 +36,8 @@ def bulge(r_kpc):
 def halo(r_kpc):
     
     r_m = r_kpc * 3.086 * 10**19
-    Up = Mhalo * Gcode * ( np.arctan(r_m / rhalo) - r_m / rhalo)
-    Down = r_m * (rhaloMax / rhalo - np.arctan(rhaloMax / rhalo))
+    Up = MHALO * Gcode * ( np.arctan(r_m / RHALO) - r_m / RHALO)
+    Down = r_m * (RHALOMAX / RHALO - np.arctan(RHALOMAX / RHALO))
     vel2_in_m = - Up / Down
     vel2_in_km = vel2_in_m / kmTom**2
     
@@ -57,18 +57,18 @@ def addbulge(r_kpc):
 
 #-------the plot 
 #rotationCurve(rotation, black, "Rotation Curve", '+', 'blank80')
-def rotationCurve(function, COLOR, LABEL, STYLE, filename = None):
+def rotationCurve(funcName, COLOR, LABEL,  STYLE, filename = None, ALPHA = 0.65):
 
     if filename != None:
         unit_p = 1
         unit_v = 10**5
         parnum = 2000
-        os.chdir('/Users/veronicaplanck/Desktop/pyAnalysis/datafiles')
+        os.chdir('/Users/veronicachang/Desktop/pyThesis/datasets')
 
-        raw_data_file = str(filename) + '.txt'
+        raw_data_file = filename
 
-        xi, yi, zi = [loadtxt(raw_data_file, unpack = True, usecols = [i]) for i in range(3)]
-        vxi, vyi, vzi = [loadtxt(raw_data_file, unpack= True, usecols= [i]) for i in range(6, 9)]
+        xi, yi, zi = [loadtxt(raw_data_file, comments = '#', unpack = True, usecols = [i]) for i in range(3)]
+        vxi, vyi, vzi = [loadtxt(raw_data_file, comments = '#', unpack= True, usecols= [i]) for i in range(6, 9)]
 
         xiSub, yiSub, ziSub = xi[:parnum], yi[:parnum], zi[:parnum]
         vxiSub, vyiSub, vziSub = vxi[:parnum], vyi[:parnum], vzi[:parnum]
@@ -81,7 +81,7 @@ def rotationCurve(function, COLOR, LABEL, STYLE, filename = None):
         Rs = np.sqrt(rlist_kpc[0] ** 2 + rlist_kpc[1] ** 2 + rlist_kpc[2] ** 2)
         Vs = np.sqrt(vrlist_kms[0] ** 2 + vrlist_kms[1] ** 2 + vrlist_kms[2] ** 2)
 
-        rotationPlot = plt.scatter(Rs, Vs)
+        rotationPlot = plt.scatter(Rs, Vs, label = 'Simulation Samples', s = 40, color = "#A569BD")
 
     Vci = []
 
@@ -89,17 +89,16 @@ def rotationCurve(function, COLOR, LABEL, STYLE, filename = None):
     r_kpc = np.arange(0.001, r_lim, 0.01)
 
     for i in range(len(r_kpc)):
-        Vci = Vci + [function(r_kpc[i])]
+        Vci = Vci + [funcName(r_kpc[i])]
     Vci = np.sqrt(np.array(Vci))
 
-    plt.plot(r_kpc, Vci, STYLE, alpha=0.8, color=COLOR, linewidth=3, label=LABEL)
-    plt.xlabel("radius_in_kpc")
-    plt.ylabel("velocity_in_km/s")
+    plt.plot(r_kpc, Vci, color=COLOR, linewidth=2.8, label=LABEL, linestyle = STYLE, alpha = ALPHA)
+    plt.xlabel("Radius [kpc]")
+    plt.ylabel("Velocity [km/s]")
     plt.legend(loc='lower right')
-    plt.title("ROTATION CURVE")
+    plt.title("Rotation Curve")
 
-    return plt.show()
-
+    return plt.savefig('../images/'+ 'Rc.png', dpi=200)
 
 
 
