@@ -3,13 +3,13 @@ import numpy as np
 import math as m
 
 #------To grid the disc
-Rm = 18                                                  # Radius of the disc 
+RM = 18                                                  # Radius of the disc 
 
-reso_R = 80      
-dis_R = np.linspace(0, Rm, reso_R + 1)                       # Divide R into pieces
+RESO_R = 80      
+DIS_R = np.linspace(0, RM, RESO_R + 1)                       # Divide R into pieces
 
-reso_theta = 60                                          # Divide θ into pieces        
-dis_theta = np.linspace(0, m.pi/2, reso_theta + 1)
+RESO_THETA = 60                                          # Divide θ into pieces        
+DIS_THETA = np.linspace(0, m.pi/2, RESO_THETA + 1)
 
 #------Units Conversion
 kpcTom = 3.086*10**19           #distance 
@@ -21,45 +21,44 @@ solarM = 1.98*10**30            #solar mass
 Gcode =  6.7 * 10**(-11)        #gravitational constant
 
 gyrTos = 3.15 * 10**16          #time 
-t_unit_phantom = 0.0468
+T_UNIT_PHANTOM = 0.0468         #Gyr
 
 #------Halo Constants
-Mhalo = 6.4 * 10**10 * solarM
-omeH = 20 * kmTom / kpcTom
+MHALO = 6.4 * 10**10 * solarM
+OMEH = 20 * kmTom / kpcTom
 
-rhaloMax = 12. * kpcTom
-rhalo = 6. * kpcTom
-HaloCi  = 1. / ( rhaloMax / rhalo - m.atan( rhaloMax / rhalo ))
+RHALOMAX = 12. * kpcTom
+RHALO = 6. * kpcTom
+HALOCI  = 1. / ( RHALOMAX / RHALO - m.atan( RHALOMAX / RHALO ))
 
 #------Disc Constants
-Md = 8.56 * 10**10 * solarM
-ad = 5.32 * kpcTom
-bd = 0.25 * kpcTom
+MDISC = 8.56 * 10**10 * solarM
+ADISC = 5.32 * kpcTom
+BDISC = 0.25 * kpcTom
 
 #------Bulge Constants
-Mb = 1.4 * 10**10 * solarM
-bb = 0.39 * kpcTom
+MBULGE = 1.4 * 10**10 * solarM
+BBULGE = 0.39 * kpcTom
 
 #------Bar Constants
-alpha2 = 0.7190                  #constants for LMabar = 2 * LMbbar = 2 * LMcbar
-beta2 = 0.6901
-pi = m.pi
-phibar = 11 * kmTom / kpcTom     #rotational speed of bar
-LMabar = 4 * kpcTom              #characteristic length of bar
+ALPHA2 = 0.7190                  #constants for LMABAR = 2 * LMbbar = 2 * LMcbar
+BETA2 = 0.6901
+PHIBAR = 11 * kmTom / kpcTom     #rotational speed of bar
+LMABAR = 4 * kpcTom              #characteristic length of bar
     
-Mbar = 3. * 10**8 * solarM       #(*in kg*)
+MBAR = 3. * 10**8 * solarM       #(*in kg*)
 
 #------Tidal Constants
-phibar_t = 11 * kmTom / kpcTom
-Mbar_t = 3.30 * 10**9 * solarM 
+PHIBAR_T = 11 * kmTom / kpcTom
+MBAR_T = 3.30 * 10**9 * solarM 
 
 #------Arm Constants
-r0 = 8 * kpcTom
-Rs = 7 * kpcTom
-rho = 2.1289 * 10**(-24) / (gTokg * cmTom**3)
-tpeak = 3 * gyrTos
-Nm = 2
-pA = m.pi / 180 * 15
-H = 0.8 * kpcTom
-Cn = [8/(3 * m.pi), 1/2, 8/(15 * m.pi)]
-constCG = -4 * m.pi * Gcode * H * rho
+RAMR0 = 8 * kpcTom
+RARMS = 7 * kpcTom
+RHOARM = 2.1289 * 10**(-24) / (gTokg * cmTom**3)
+TPEAK = 3 * gyrTos
+NARM = 2
+PITCHARM = m.pi / 180 * 15
+HARM = 0.8 * kpcTom
+CnARM = [8/(3 * m.pi), 1/2, 8/(15 * m.pi)]
+CGARM = -4 * m.pi * Gcode * HARM * RHOARM
