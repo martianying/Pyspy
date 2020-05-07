@@ -17,17 +17,17 @@ def haloGrow(ti, duration):
     
     
 #----cgArm 
-def armEvol(ti, tpeak = 6, sigma = 1):
-    tpeak = tpeak * t_unit_phantom * gyrTos
+def armEvol(ti, tpeakf = TPEAK / gyrTos, sigma = 1):
+    tpeakf = tpeakf * gyrTos
     sigma = sigma * gyrTos
     ti = ti * gyrTos
-    mag = np.exp( - (ti - tpeak)**2 / (2. * sigma**2) )
+    mag = np.exp( - (ti - tpeakf)**2 / (2. * sigma**2) )
     return mag
     
     
 #----bar
 def barGrowth(ti):
-    taub = 6 * m.pi / phibar
+    taub = 6 * m.pi / PHIBAR
     t0 = 4 * taub   #time used to reach the half maximum of the total bar strength
     ti = ti * gyrTos
     mag = 1/2 + 1/2 * m.tanh((ti- t0)/taub)
@@ -37,7 +37,7 @@ def barGrowth(ti):
 #----tidal
 def tidalTerm(ti):
     ti = ti * gyrTos
-    taut = 1 / phibar
+    taut = 1 / PHIBAR
     t0 = 2.5 * taut
     mag = m.exp(-(ti - 5 * t0)**2 / (2 * (taut)**2))
     return mag
