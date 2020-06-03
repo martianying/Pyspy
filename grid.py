@@ -1,4 +1,3 @@
-
 # ---------------------- LOAD PACKAGES ---------------------#
 
 import numpy as np
@@ -79,7 +78,7 @@ def secterArea(loc):
     length_up = DIS_THETA[1] * DIS_R[loc +1]
     length_down = DIS_THETA[1] * DIS_R[loc]
     result = 1/ 2 * (length_up + length_down) * width
-    return result * kpcTom**2
+    return result
 
 
 def gridR(data, nq, r_loc, theta_loc):
@@ -112,7 +111,7 @@ def getDenFileOf(raw_data_file):
 
     for i in range(len(DIS_R) - 1):
         test = loadtxt(np_data_file, unpack=True, usecols=[i])
-        den_for_this_col = test * PARTICLE_MASS / secterArea(i)
+        den_for_this_col = test / secterArea(i)
         for k in range(len(den_for_this_col)):
             den_w.write("%f\t" % (den_for_this_col[k]))
         den_w.write("\n")
@@ -156,11 +155,12 @@ def plotHeatmap(denFileName, TITLE):
     # here the adjustFile function has already directed the directory.
     adjusted_denFile = adjustFile(denFileName, 'n')
     # fig, ax = plt.subplots(figsize=(7,5))
+    VMAX = 4000
     heat_map = sns.heatmap(adjusted_denFile, cmap="RdPu",
-                           cbar_kws={'label': 'Dnesity Contrast'}, vmin=0, vmax=1700)
+                           cbar_kws={'label': 'Dnesity Contrast'}, vmin=0, vmax=VMAX)
 
     cbar = heat_map.collections[0].colorbar
-    cbar.set_ticks([0, 1700 * 1 / 4, 1700 * 2 / 4, 1700 * 3 / 4, 1700])
+    cbar.set_ticks([0, VMAX * 1 / 4, VMAX * 2 / 4, VMAX * 3 / 4, VMAX])
     cbar.set_ticklabels(['0', '25%', '50%', '75%', '100%'])
     cbar.ax.tick_params(labelsize=8, grid_alpha=0.5, direction='in')
 
@@ -184,24 +184,21 @@ def denAlongR(denfile_path_name_list, scolor_list, lab_list):
     (figure, axes) = plt.subplots()
     for i in range(len(denfile_path_name_list)):
         f = open(denfile_path_name_list[i])
-        denRi = loadtxt(f, unpack=True, usecols=[0])
+        denR_num  = loadtxt(f, unpack=True, usecols=[0])
         radius = DIS_R[:-1]
-
+        # NumberDensity * ParticleMass (Mo/kpc^2)
+        denRi = denR_num * PARTICLE_MASS
 
         plt.scatter(radius, denRi, color=scolor_list[i], s=25, label=lab_list[i])
         plt.yscale("log")
 
         plt.xlabel('R [kpc]')
-        plt.ylabel(r'Column Density  [g/$m^{2}$]')
+        plt.ylabel(r'Column Density  [$M_{o}$ / $kpc^{2}$]')
         plt.tick_params(direction="in")
 
         axes.yaxis.set_tick_params(direction='in', which='both')
-        plt.ylim(10, 1000000)
+        plt.ylim(10, 10**10)
 
         plt.title('Initial Radial Column Density')
         plt.legend()
     return plt.savefig(denfile_path_name_list[0][:-4] + '.png', dpi=200), print("go den/ to check your output.")
-
-
-
-
