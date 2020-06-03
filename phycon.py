@@ -11,6 +11,8 @@ DIS_R = np.linspace(0, RM, RESO_R + 1)                       # Divide R into pie
 RESO_THETA = 60                                          # Divide θ into pieces        
 DIS_THETA = np.linspace(0, m.pi/2, RESO_THETA + 1)
 
+
+
 #------Units Conversion
 kpcTom = 3.086*10**19           #distance 
 cmTom = 10**(-2)
@@ -19,6 +21,9 @@ kmTom = 10**3
 gTokg = 10**3                   #weight 
 solarM = 1.98*10**30            #solar mass
 Gcode =  6.7 * 10**(-11)        #gravitational constant
+
+PARNUM = 10**6
+PARTICLE_MASS = 10**10 / PARNUM   #mass of gas particle in kg
 
 gyrTos = 3.15 * 10**16          #time 
 T_UNIT_PHANTOM = 0.0468         #Gyr
