@@ -171,16 +171,16 @@ def plotHeatmap(denFileName, TITLE):
                ['0', '5', '10', '15'], rotation=0)
 
     plt.tick_params(direction="in")
-    plt.title(TITLE, x=0.5, y=1.05)
+    #plt.title(TITLE, x=0.5, y=1.05)
     plt.xlabel(r"$\theta$ [rad]")
     plt.ylabel("R [kpc]")
 
-    return plt.savefig('images/' + TITLE, dpi=200), print("finished")
+    return plt.savefig('images/' + TITLE, dpi=200), print("go den/ to check " + TITLE + ".png")
 
 
 
 # plot the surface density along the radius at theta = 0.
-def denAlongR(denfile_path_name_list, scolor_list, lab_list):
+def denAlongR(denfile_path_name_list, lab_list):
     (figure, axes) = plt.subplots()
     for i in range(len(denfile_path_name_list)):
         f = open(denfile_path_name_list[i])
@@ -189,15 +189,18 @@ def denAlongR(denfile_path_name_list, scolor_list, lab_list):
         # NumberDensity * ParticleMass (Mo/kpc^2)
         denRi = denR_num * PARTICLE_MASS
 
-        plt.scatter(radius, denRi, color=scolor_list[i], s=25, label=lab_list[i])
+        if i == 0 :
+            plt.plot(radius, denRi,label=lab_list[i],color=COLOR2, linewidth = 6, alpha = 0.5)
+        else :
+            plt.plot(radius, denRi, label=lab_list[i], color=COLOR1, linewidth = 2, alpha = 10)
         plt.yscale("log")
 
         plt.xlabel('R [kpc]')
-        plt.ylabel(r'Column Density  [$M_{o}$ / $kpc^{2}$]')
+        plt.ylabel(r'Column Density  [$M_{\odot}$ / $kpc^{2}$]')
         plt.tick_params(direction="in")
 
         axes.yaxis.set_tick_params(direction='in', which='both')
-        plt.ylim(10, 10**10)
+        plt.ylim(10**5, 10**9)
 
         plt.title('Initial Radial Column Density')
         plt.legend()
