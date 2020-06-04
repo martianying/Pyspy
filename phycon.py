@@ -2,6 +2,12 @@
 import numpy as np
 import math as m
 
+#setup your favorite colors!
+COLOR1 = "#990000"
+COLOR2 = "#A569BD"
+COLOR3 = "#004d99"
+COLOR4 = "#D35400"
+COLOR5 = "#D7BDE2"
 #------To grid the disc
 RM = 18                                                  # Radius of the disc 
 
