@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from numpy import loadtxt
 import os
 import random
+from phycon import *
 
 os.chdir("/Users/veronicachang/Desktop/pyThesis")
 
@@ -52,7 +53,7 @@ def invCDF(rand, s, Rm):
     return rmid
 
 
-def getRsamples(parNum, FILEPATH):
+def generateAndSaveRSamples(parNum, FILEPATH):
     random_samples = np.array([random.random() for i in range(parNum)])
     samples = [invCDF(rand, scale, RM) for rand in random_samples]
     theta_list = np.array([2 * m.pi * random.random() for i in range(parNum)])
@@ -68,8 +69,30 @@ def getRsamples(parNum, FILEPATH):
     mass_r.close()
     print("generation finished")
 
+def getAndPlotRsamples(parNum):
+    plotName = 'ExpSetupPythonScatterPlot.png'
+    random_samples = np.array([random.random() for i in range(parNum)])
+    samples = [invCDF(rand, scale, RM) for rand in random_samples]
+    theta_list = np.array([2 * m.pi * random.random() for i in range(parNum)])
+
+    xis = samples * np.cos(theta_list)
+    yis = samples * np.sin(theta_list)
+
+    fig = plt.figure(figsize=(4.5, 4.5))
+    ax = fig.add_subplot(111)
+    plt.scatter(xis, yis, color=COLOR1, s=0.1)
+    ax.set_aspect('equal', adjustable='box')
+    ax.yaxis.set_tick_params(direction='in', which='both')
+    ax.xaxis.set_tick_params(direction='in', which='both')
+
+    plt.xlabel("X [kpc]")
+    plt.ylabel("Y [kpc]")
+    plt.title("Initial Particle Distribution")
+
+    return print("go image/ check out " + plotName), plt.savefig('images/'+ plotName, dpi=200)
 
 def plotPdfCdf():
+    plotName = 'E_iniColDenPdfCdf.png'
     random_samples = np.array([random.random() for i in range(5000)])
     samples = [invCDF(rand, scale, RM) for rand in random_samples]
 
@@ -81,22 +104,22 @@ def plotPdfCdf():
 
     ys = [invHelper(i, 0.4, 3, 15) for i in xs]
 
-    plt.plot(xs, yes, label="Column density", color="#C70039", linewidth=2.5)
-    plt.plot(xs, yps, label="PDF", color="#7D3C98", linewidth=2.5)
-    plt.plot(xs, yns, label="CDF ", color="#3498DB", linewidth=2.5)
-    plt.plot(xs, ys, label="CDF monotonicity ", linestyle='--', color="#D35400", linewidth=2.5, )
+    plt.plot(xs, yes, label="Column density", color=COLOR1, linewidth=2.5)
+    plt.plot(xs, yps, label="PDF", color=COLOR2, linewidth=2.5)
+    plt.plot(xs, yns, label="CDF ", color=COLOR3, linewidth=2.5)
+    plt.plot(xs, ys, label="CDF monotonicity ", linestyle='--', color=COLOR4, linewidth=2.5, )
     plt.ylim(10 ** (-4), 5)
     plt.yscale("log")
     axes.yaxis.set_tick_params(direction='in', which='both')
     axes.xaxis.set_tick_params(direction='in', which='both')
 
     num_bins = 30
-    n, bins, patches = plt.hist(samples, num_bins, facecolor='#D7BDE2', density=True, alpha=0.5)
+    n, bins, patches = plt.hist(samples, num_bins, facecolor=COLOR5, density=True, alpha=0.5)
 
-    plt.title("Exponential Initial Column Surface Density")
+    plt.title("Exponential Initial Column Surface Density \n scale = " + str(scale) + "Gyr")
     plt.xlabel("R [kpc]")
     plt.ylabel("Value")
     plt.legend()
 
 
-    return plt.savefig('images/'+ 'E_iniColDenPdfCdf.png', dpi=200)
+    return print("go images/ to check " + plotName), plt.savefig('images/'+ plotName, dpi=200)
