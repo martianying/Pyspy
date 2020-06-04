@@ -11,9 +11,9 @@ from phycon import *
 os.chdir("/Users/veronicachang/Desktop/pyThesis")
 
 RM = 15
-scale = 3
+SCALE = 3
 parNum = 5000000
-sig = 10 ** (-5)
+SIG = 10 ** (-5)
 
 
 def den(r, s):
@@ -44,7 +44,7 @@ def invHelper(r, rand, s, Rm):
 def invCDF(rand, s, Rm):
     rmin = 0
     rmax = RM
-    while (rmax - rmin) / 2 > sig:
+    while (rmax - rmin) / 2 > SIG:
         rmid = (rmax + rmin) / 2
         if invHelper(rmid, rand, s, Rm) * invHelper(rmax, rand, s, Rm) < 0:
             rmin = rmid
@@ -55,7 +55,7 @@ def invCDF(rand, s, Rm):
 
 def generateAndSaveRSamples(parNum, FILEPATH):
     random_samples = np.array([random.random() for i in range(parNum)])
-    samples = [invCDF(rand, scale, RM) for rand in random_samples]
+    samples = [invCDF(rand, SCALE, RM) for rand in random_samples]
     theta_list = np.array([2 * m.pi * random.random() for i in range(parNum)])
 
     xis = samples * np.cos(theta_list)
@@ -72,7 +72,7 @@ def generateAndSaveRSamples(parNum, FILEPATH):
 def getAndPlotRsamples(parNum):
     plotName = 'ExpSetupPythonScatterPlot.png'
     random_samples = np.array([random.random() for i in range(parNum)])
-    samples = [invCDF(rand, scale, RM) for rand in random_samples]
+    samples = [invCDF(rand, SCALE, RM) for rand in random_samples]
     theta_list = np.array([2 * m.pi * random.random() for i in range(parNum)])
 
     xis = samples * np.cos(theta_list)
@@ -94,13 +94,13 @@ def getAndPlotRsamples(parNum):
 def plotPdfCdf():
     plotName = 'E_iniColDenPdfCdf.png'
     random_samples = np.array([random.random() for i in range(5000)])
-    samples = [invCDF(rand, scale, RM) for rand in random_samples]
+    samples = [invCDF(rand, SCALE, RM) for rand in random_samples]
 
     (figure, axes) = plt.subplots()
     xs = np.arange(0., RM, 0.01)
-    yes = den(xs, scale)
-    yps = pDF(xs, scale, RM)
-    yns = cDF(xs, scale, RM)
+    yes = den(xs, SCALE)
+    yps = pDF(xs, SCALE, RM)
+    yns = cDF(xs, SCALE, RM)
 
     ys = [invHelper(i, 0.4, 3, 15) for i in xs]
 
@@ -116,7 +116,7 @@ def plotPdfCdf():
     num_bins = 30
     n, bins, patches = plt.hist(samples, num_bins, facecolor=COLOR5, density=True, alpha=0.5)
 
-    plt.title("Exponential Initial Column Surface Density \n scale = " + str(scale) + "Gyr")
+    plt.title("Exponential Initial Column Surface Density \n scale = " + str(SCALE) + "Gyr")
     plt.xlabel("R [kpc]")
     plt.ylabel("Value")
     plt.legend()
