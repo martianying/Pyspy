@@ -1,5 +1,5 @@
 # pyAnalysis
-python and C++ code for analyzing simulation results obtained in Phantom.
+python code for analyzing simulation results obtained in Phantom.
 
 Still in progress.
 
