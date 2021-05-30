@@ -60,6 +60,6 @@ with module <code>src/growth</code> and <code>src/spiralFit</code>, we could obt
 </p>
 
 
-**I would be really happy if this repo could be some kind of help for people doing research in this field. 
+**I would be really happy if this repo could be some kind of help for people doing research in this field.**
 
-My last physics project with love.**
+**My last physics project with love.**
