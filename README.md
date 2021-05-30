@@ -8,7 +8,7 @@ This repo contains python package I wrote for processing and analyzing simulatio
 
 ### Why I put it here? 
 
-For some reasons, I don't have a chance to refine and publish this work at this moment. I hope, at least, I could put my work here for people might be working on the same specific field such that they could avoid doing possible redundant work. And I also upload a copy of my master's thesis in case you need more details.
+For some reasons, I don't have a chance to refine or publish this work at this moment. I hope, at least, I could put my work here for people might be working on the same specific field such that they could avoid doing possible redundant work. And I also upload a copy of my master's thesis in case you need more details.
 
 With this python package, we could preprocess data obtained from PHANTOM to grid the galactic discs and calculate the number density, averaged azimuthal velocity and radial velocity in order to analyze particle dynamics. We could also fit them with a Fourier mode so as to analyze the spiarl patterns quantitatively.  
 
