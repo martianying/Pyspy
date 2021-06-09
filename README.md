@@ -1,3 +1,5 @@
+## Pyspy: analyze and visualize data output by Phantom
+
 ### Content
 
 This repo contains python package I wrote for processing and analyzing simulation results obtained from PHANTOM, so as to investigate formation of galactic spirals in gaseous discs driven by different machanisms. 
