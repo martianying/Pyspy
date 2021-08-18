@@ -1,4 +1,4 @@
-## Pyspy: analyze and visualize data output by Phantom
+## Pyspy: analyze and visualize data from simultion in Phantom
 
 ### Content
 
